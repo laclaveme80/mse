@@ -5,10 +5,6 @@
 #include "draw.h"
 #include "config.h"
 
-// define os atalhos do editor
-#define CTRL_Q 17
-#define CTRL_S 19
-
 int main(int argc, char *argv[]) {
     //verificação padrao
     if (argc < 2){
@@ -38,7 +34,7 @@ int main(int argc, char *argv[]) {
     int c;
     int off_y = 0;
     // loop principal
-    while((c = getch()) != CTRL_Q){
+    while((c = getch()) != EXIT){
         getmaxyx(stdscr, max_y, max_x);
         clear();
         switch (c) {
@@ -49,7 +45,7 @@ int main(int argc, char *argv[]) {
                 else if(off_y >0){
                     off_y--;
                 }
-                vetor = texto[cY];
+                vetor = texto[cY+off_y];
                 capacidade = strlen(vetor) + 1;
                 if (cX > strlen(vetor)) cX = strlen(vetor);
                 break;
@@ -60,25 +56,69 @@ int main(int argc, char *argv[]) {
                 else if (off_y+cY <linhas-1){
                     off_y++;
                 }
-                vetor = texto[cY];
+                vetor = texto[cY+off_y];
                 capacidade = strlen(vetor) + 1;
                 if (cX > strlen(vetor)) cX = strlen(vetor);
                 break;
             case KEY_LEFT:
                 if(cX > 0)cX--;
+                else if(cX == 0){
+                    if (cY > 0){
+                        cY--;
+                    }else if(off_y > 0){
+                        off_y--;
+                    }
+                    if(cY+off_y !=0){
+                        cX = strlen(texto[(cY+off_y)]);
+                    }
+                    vetor = texto[cY+off_y];
+                    capacidade = strlen(vetor)+1;
+                }
                 break;
             case KEY_RIGHT:
                 if(cX < max_x -1 && cX < strlen(vetor))cX++;
+                else if (cX == strlen(vetor)){
+                    if(texto[cY+off_y+1] != NULL){
+                        cX = 0;
+                        if(cY < max_y -1 && cY < linhas-1){
+                            cY++;
+                        }
+                        else if(off_y+cY < linhas-1){
+                            off_y++;
+                        }
+                    }
+                    vetor = texto[cY+off_y];
+                    capacidade = strlen(vetor)+1;
+                }
                 break;
             default:
-                vetor = texto[cY];
+                vetor = texto[cY+off_y];
                 capacidade = strlen(texto[cY])+1;
-                if (c == CTRL_S){
+                if (c == SAVE){
                     save_text(argv[1], texto, linhas);
+                }
+                else if(c == '\n'){
+                    if (cX >= strlen(vetor)){
+                        if(add_line(&texto, &linhas, cY+1) == 1){
+                            endwin();
+                            free_text(texto, linhas);
+                            return 1;
+                        }
+                        cY++;
+                        cX = 0;
+                    }
+                    else{
+                        if(add_line(&texto, &linhas, cY) == 1){
+                            endwin();
+                            free_text(texto, linhas);
+                            return 1;
+                        }
+                        cY++;
+                    }
                 }
                 else if(c == KEY_BACKSPACE){
                     if(cX > 0){
-                        if(rem_vetor(&vetor, &capacidade, cX) == 1){
+                        if(rem_char(&vetor, &capacidade, cX) == 1){
                             endwin();
                             free_text(texto, linhas);
                             return 1;
@@ -88,7 +128,7 @@ int main(int argc, char *argv[]) {
                     break;
                 }
                 if (c >= 32 && c <= 126) {
-                    if(add_vetor(&vetor, &capacidade, c, cX) == 1){
+                    if(add_char(&vetor, &capacidade, c, cX) == 1){
                         endwin();
                         free_text(texto, linhas);
                         return 1;

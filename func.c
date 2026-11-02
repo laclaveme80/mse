@@ -114,7 +114,7 @@ int alloc(char **vetor, int *capacidade){
     return 0;
 }
 // adiciona um character num char vetor
-int add_vetor(char **vetor, int *capacidade, char c, int x){
+int add_char(char **vetor, int *capacidade, char c, int x){
     if(alloc(vetor, capacidade)== 1){
         perror("erro ao adicionar character");
         return 1;
@@ -126,7 +126,7 @@ int add_vetor(char **vetor, int *capacidade, char c, int x){
     return 0;
 }
 // remove um caracter de um char vetor
-int rem_vetor(char **vetor, int *capacidade, int x){
+int rem_char(char **vetor, int *capacidade, int x){
     int c = x-1;
     if(c <0){
         return 0;
@@ -160,5 +160,26 @@ int save_text(const char *arquivo, char **texto, int linhas){
         }
     }
     fclose(fp);
+    return 0;
+}
+
+int add_line(char ***matriz, int *linhas, int y){
+    int nova_linhas = (*linhas) +1;
+    char **temp = realloc(*matriz, nova_linhas * sizeof(char*));
+    if (temp == NULL){
+        printf("erro ao adicionar linha\n");
+        return 1;
+    }
+    *matriz = temp;
+    for(int i = nova_linhas-1; i > y; i--){
+        (*matriz)[i] = (*matriz)[i-1];
+    }
+    (*matriz)[y] = malloc( 1 * sizeof(char));
+    if ((*matriz)[y] == NULL){
+        printf("erro ao alocar mem para linha\n");
+        return 1;
+    }
+    (*matriz)[y][0] = '\0';
+    *linhas = nova_linhas;
     return 0;
 }
