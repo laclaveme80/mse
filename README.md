@@ -2,23 +2,27 @@
 
 focado em levesa e simplicidade escrito em C utilizando a biblioteca Ncurses
 
-para utilizar deste programa é necessario instalar os items abaixo no seu sistema Linux:
+para utilizar deste programa e necessario instalar os items abaixo no seu sistema Linux:
 - gcc
 - make
 - libncurses-dev
-## instalação e uso
-
+## instalacao e uso
+```bash
 git clone https://github.com/laclaveme80/mse.git
 cd mse
 make
 sudo make install
 mse README.md
-
-# para desintalação
-
+```
+## para desintalacao
+```bash
 sudo make uninstall
+```
+## comandos
 
-# comandos
+- ctrl + q, sair do editor
+- ctrl + s, salvar o arquivo
 
-Ctrl + Q, sair do editor
-Ctrl + S, salvar o arquivo
+## configuracao
+
+e feita modificando o arquivo config.h e compilando

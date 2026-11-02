@@ -9,3 +9,6 @@ static const unsigned int theme = 3; // default: none
     mc         // 2
     none       // 1
 }*/
+// define os atalhos
+#define EXIT ('q' & 0x1f) // ctrl + q
+#define SAVE ('s' & 0x1f) // ctrl + s
