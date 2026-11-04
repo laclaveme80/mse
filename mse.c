@@ -6,7 +6,7 @@
 #include "config.h"
 
 int main(int argc, char *argv[]) {
-    //verificação padrao
+    //verificacao padrao
     if (argc < 2){
         printf("parametros insuficientes...\n");
         return 1;
@@ -68,9 +68,7 @@ int main(int argc, char *argv[]) {
                     }else if(off_y > 0){
                         off_y--;
                     }
-                    if(cY+off_y !=0){
-                        cX = strlen(texto[(cY+off_y)]);
-                    }
+                    cX = strlen(texto[(cY+off_y)]);
                     vetor = texto[cY+off_y];
                     capacidade = strlen(vetor)+1;
                 }
@@ -98,8 +96,8 @@ int main(int argc, char *argv[]) {
                     save_text(argv[1], texto, linhas);
                 }
                 else if(c == '\n'){
-                    if (cX >= strlen(vetor)){
-                        if(add_line(&texto, &linhas, cY+1) == 1){
+                    if (cX == strlen(vetor)){
+                        if(add_line(&texto, &linhas, cY+off_y+1) == 1){
                             endwin();
                             free_text(texto, linhas);
                             return 1;
@@ -108,7 +106,7 @@ int main(int argc, char *argv[]) {
                         cX = 0;
                     }
                     else{
-                        if(add_line(&texto, &linhas, cY) == 1){
+                        if(add_line(&texto, &linhas, cY+off_y) == 1){
                             endwin();
                             free_text(texto, linhas);
                             return 1;
@@ -118,11 +116,14 @@ int main(int argc, char *argv[]) {
                 }
                 else if(c == KEY_BACKSPACE){
                     if(cX > 0){
+                        vetor = texto[cY+off_y];
+                        capacidade = strlen(vetor)+1;
                         if(rem_char(&vetor, &capacidade, cX) == 1){
                             endwin();
                             free_text(texto, linhas);
                             return 1;
                         }
+                        vetor = texto[cY+off_y];
                         cX--;
                     }
                     break;

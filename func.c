@@ -129,20 +129,20 @@ int add_char(char **vetor, int *capacidade, char c, int x){
 int rem_char(char **vetor, int *capacidade, int x){
     int c = x-1;
     if(c <0){
-        return 0;
+        perror("erro 1");
+        return 1;
     }
     for(int i = c; i < *capacidade-1; i++){
         (*vetor)[i] = (*vetor)[i+1];
     }
-    (*vetor)[*capacidade-2] = '\0';
-    int nova_capacidade = (*capacidade)-1;
-    char *tmp = realloc(*vetor, nova_capacidade * sizeof(char));
+    (*capacidade)--;
+    char *tmp = realloc(*vetor, (*capacidade) * sizeof(char));
     if(tmp == NULL){
         perror("erro ao deletar character");
         return 1;
     }
     *vetor = tmp;
-    *capacidade = nova_capacidade;
+    (*vetor)[*capacidade - 1] = '\0';
     return 0;
 }
 // passa o matriz para um arquivo
